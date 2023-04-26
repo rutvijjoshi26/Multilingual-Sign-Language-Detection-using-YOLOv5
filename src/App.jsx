@@ -289,14 +289,13 @@ const App = () => {
 
   return (
     <div className="App">
-      {loading.loading && <Loader>Loading model... {(loading.progress * 100).toFixed(2)}%</Loader>}
+      {loading.loading && <Loader>Loading... {(loading.progress * 100).toFixed(2)}%</Loader>}
       <div className="header">
-        <h1>📷 YOLOv5 Live Detection App</h1>
+        <h1>📷 Multilingual Sign Language Detection</h1>
         <p>
-          YOLOv5 live detection application on browser powered by <code>tensorflow.js</code>
-        </p>
+          Multilingual Sign Language Detection using YOLOv5 Algorithm</p>
         <p>
-          Serving : <code className="code">{modelName}</code>
+          Language : <code className="code">{modelName}</code>
         </p>
       </div>
 
@@ -322,7 +321,6 @@ const App = () => {
       </div>
 
       <ButtonHandler imageRef={imageRef} cameraRef={cameraRef} videoRef={videoRef} />
-      {/* <button onClick={() => {setModelName("hindi")}}>Change Model</button>  */}
       <label>
 
       Select Language
