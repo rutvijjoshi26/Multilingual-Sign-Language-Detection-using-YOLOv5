@@ -205,35 +205,60 @@ const detectVideo = (vidSource, model, classThreshold, canvasRef, modelName) => 
   /**
    * Function to detect every frame from video
    */
-  const detectFrame = async () => {
-    if (vidSource.videoWidth === 0 && vidSource.srcObject === null) {
-      const ctx = canvasRef.getContext("2d");
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
-      return; // handle if source is closed
+//   const detectFrame = async () => {
+//     if (vidSource.videoWidth === 0 && vidSource.srcObject === null) {
+//       const ctx = canvasRef.getContext("2d");
+//       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
+//       return; // handle if source is closed
+//     }
+
+//     tf.engine().startScope(); // start scoping tf engine
+//     const [input, xRatio, yRatio] = preprocess(vidSource, modelWidth, modelHeight);
+
+//     await model.net.executeAsync(input).then((res) => {
+//       const [boxes, scores, classes] = res.slice(0, 3);
+//       const boxes_data = boxes.dataSync();
+//       const scores_data = scores.dataSync();
+//       const classes_data = classes.dataSync();
+//       // console.log(classes_data)
+//       renderBoxes(canvasRef, classThreshold, boxes_data, scores_data, classes_data, [
+//         xRatio,
+//         yRatio, modelName
+//       ]); // render boxes
+//       tf.dispose(res); // clear memory
+//     });
+
+//     requestAnimationFrame(detectFrame); // get another frame
+//     tf.engine().endScope(); // end of scoping
+//   };
+
+//   detectFrame(); // initialize to detect every frame
+// };
+  const detectFrame = async ()=>{
+    if(vidSource.videoWidth === 0 || vidSource.srcObject===null){
+      const ctx=canvasRef.getContext('2d')
+      ctx.clearRect(0,0,canvasRef.width,canvasRef.height)
+      requestAnimationFrame(detectFrame)
+      return
     }
+    tf.engine().startScope()
+    const [input,xRatio,yRatio]=preprocess(vidSource,modelWidth,modelHeight)
+    const res=await model.net.executeAsync(input)
+    const [boxes,scores,classes]=res.slice(0,3)
+    const boxesData=await boxes.data()
+    const scoresData=await scores.data()
+    const classesData=await classes.data()
 
-    tf.engine().startScope(); // start scoping tf engine
-    const [input, xRatio, yRatio] = preprocess(vidSource, modelWidth, modelHeight);
-
-    await model.net.executeAsync(input).then((res) => {
-      const [boxes, scores, classes] = res.slice(0, 3);
-      const boxes_data = boxes.dataSync();
-      const scores_data = scores.dataSync();
-      const classes_data = classes.dataSync();
-      renderBoxes(canvasRef, classThreshold, boxes_data, scores_data, classes_data, [
-        xRatio,
-        yRatio, modelName
-      ]); // render boxes
-      tf.dispose(res); // clear memory
-    });
-
-    requestAnimationFrame(detectFrame); // get another frame
-    tf.engine().endScope(); // end of scoping
-  };
-
-  detectFrame(); // initialize to detect every frame
-};
-
+    renderBoxes(canvasRef,classThreshold,boxesData,scoresData,classesData,[
+      xRatio,
+      yRatio,
+      modelName
+    ]);
+    tf.dispose([res,boxes,scores,classes])
+    requestAnimationFrame(detectFrame)
+  }
+  detectFrame()
+}
 
 
 
