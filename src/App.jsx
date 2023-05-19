@@ -251,9 +251,8 @@ const detectVideo = (vidSource, model, classThreshold, canvasRef, modelName) => 
 
     renderBoxes(canvasRef,classThreshold,boxesData,scoresData,classesData,[
       xRatio,
-      yRatio,
-      modelName
-    ]);
+      yRatio
+    ],modelName);
     tf.dispose([res,boxes,scores,classes])
     requestAnimationFrame(detectFrame)
   }
