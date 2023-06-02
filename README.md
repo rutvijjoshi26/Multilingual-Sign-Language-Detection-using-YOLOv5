@@ -7,9 +7,11 @@ This project aims to detect and classify hand gestures in sign languages from mu
 
 2. cd Multilingual-Sign-Language-Detection-using-YOLOv5
 
-3. yarn install 
+3. npm install -g yarn
 
-4. yarn start
+4. yarn install 
+
+5. yarn start
 
 The application has a user interface that allows the user to select the detection mode, language, and upload an image or video file for detection. The application supports the following detection modes:
 
